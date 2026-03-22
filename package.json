@@ -1,0 +1,19 @@
+{
+    "name": "@phillipsharring/graspr-framework",
+    "version": "0.1.0",
+    "description": "HTMX + Handlebars + Tailwind frontend framework",
+    "type": "module",
+    "exports": {
+        ".": "./src/index.js",
+        "./init": "./src/init.js",
+        "./styles/*": "./styles/*",
+        "./src/*": "./src/*"
+    },
+    "author": "Phillip Harrington <phillip@phillipharrington.com> (https://phillipharrington.com/)",
+    "license": "MIT",
+    "peerDependencies": {
+        "handlebars": "^4.7.0",
+        "htmx.org": "^2.0.0",
+        "sortablejs": "^1.15.0"
+    }
+}

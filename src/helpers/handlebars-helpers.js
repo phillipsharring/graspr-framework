@@ -9,7 +9,7 @@ export function registerHandlebarsHelpers(Handlebars) {
     <button type="button" class="border rounded px-3 py-2 hover:bg-slate-50" data-modal-close>
         Cancel
     </button>
-    <button type="submit" class="rounded px-3 py-2 bg-slate-900 text-white hover:bg-slate-800">
+    <button type="submit" class="rounded px-3 py-2 bg-slate-800 text-white hover:bg-slate-700">
         {{label}}
     </button>
 </div>`);

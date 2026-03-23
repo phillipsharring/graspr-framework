@@ -71,3 +71,6 @@ export { escapeHtml } from './helpers/escape-html.js';
 export { populateSelect } from './helpers/populate-select.js';
 export { getRouteParams } from './helpers/route-params.js';
 export { debounce, scrubSearchInput } from './helpers/debounce.js';
+
+// Lifecycle hooks
+export { onAfterSwap, onAfterSettle, onPageLoad, onHistoryRestore } from './hooks.js';

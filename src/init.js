@@ -11,3 +11,4 @@ import './core/auth-state.js';
 import './core/forms.js';
 import './core/search.js';
 import './core/sortable.js';
+import './hooks.js';

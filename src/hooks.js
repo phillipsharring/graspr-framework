@@ -19,6 +19,8 @@ const hooks = {
     historyRestore: [],
 };
 
+var pageLoaded = document.readyState !== 'loading';
+
 /** Register a callback that runs after #app is swapped via boosted nav. */
 export function onAfterSwap(fn) {
     hooks.afterSwap.push(fn);
@@ -29,9 +31,11 @@ export function onAfterSettle(fn) {
     hooks.afterSettle.push(fn);
 }
 
-/** Register a callback that runs on DOMContentLoaded (full page load only). */
+/** Register a callback that runs on DOMContentLoaded (full page load only).
+ *  If DOMContentLoaded already fired, runs immediately. */
 export function onPageLoad(fn) {
     hooks.pageLoad.push(fn);
+    if (pageLoaded) fn(document);
 }
 
 /** Register a callback that runs on browser back/forward (history restore). */
@@ -56,6 +60,7 @@ document.body.addEventListener('htmx:afterSettle', function(e) {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
+    pageLoaded = true;
     hooks.pageLoad.forEach(function(fn) { fn(document); });
 });
 

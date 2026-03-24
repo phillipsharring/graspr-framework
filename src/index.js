@@ -66,6 +66,7 @@ export { createTypeahead } from './ui/typeahead.js';
 
 // Helpers
 export { registerHandlebarsHelpers } from './helpers/handlebars-helpers.js';
+export { registerAbHelpers } from './helpers/ab-helpers.js';
 export { initCopyIdHandler } from './helpers/utils.js';
 export { escapeHtml } from './helpers/escape-html.js';
 export { populateSelect } from './helpers/populate-select.js';

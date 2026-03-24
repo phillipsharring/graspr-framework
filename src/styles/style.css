@@ -1,0 +1,9 @@
+@import 'tailwindcss';
+
+@source "../../content/**/*.html";
+@source "../**/*.js";
+
+/* Scan framework JS for Tailwind classes (toast colors, etc.) */
+@source "../../node_modules/@phillipsharring/graspr-framework/src/**/*.js";
+
+@import '@phillipsharring/graspr-framework/styles/base.css';

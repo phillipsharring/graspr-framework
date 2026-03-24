@@ -1,0 +1,33 @@
+<!-- Global toast (hidden by default). HTMX can target #global-toast-content. -->
+<div
+    id="global-toast-wrap"
+    class="fixed top-4 right-4 z-[70] hidden pointer-events-none opacity-0 translate-y-2 transition duration-200 ease-out"
+    aria-live="polite"
+    aria-atomic="true"
+    aria-hidden="true"
+>
+    <div id="global-toast-content"></div>
+</div>
+
+<!-- Handlebars template for JSON -> toast HTML -->
+<template id="global-toast-template">
+    <div
+        class="pointer-events-auto w-[22rem] max-w-[calc(100vw-2rem)] rounded-lg border shadow-lg p-4 {{toastClass status}}"
+        role="status"
+    >
+        <div class="flex items-start gap-3">
+            <div class="flex-1 text-sm">
+                <div class="font-medium">Notification</div>
+                <div class="mt-1 opacity-95">{{message}}</div>
+            </div>
+            <button
+                type="button"
+                class="rounded px-2 py-1 hover:bg-black/10"
+                data-toast-close
+                aria-label="Dismiss notification"
+            >
+                ✕
+            </button>
+        </div>
+    </div>
+</template>

@@ -1,0 +1,459 @@
+<layout name="examples" />
+<div class="space-y-10">
+    <callout title="Components demo" subtle class="mb-6">
+        <p>
+            This box is a build-time component. Props: <code>title</code> and boolean <code>subtle</code>. The paragraph
+            is slot content.
+        </p>
+    </callout>
+
+    <callout title="Nesting demo" subtle class="mb-6">
+        <callout title="Nested callout" subtle class="mb-6">
+            <p>I'm nested!</p>
+        </callout>
+        <p>I'm not nested!</p>
+    </callout>
+
+    <section>
+        <h1 class="text-2xl font-bold">Home</h1>
+        <p class="mt-2 text-slate-600">
+            Quick demos for boosted navigation, GET JSON templates, and JSON-encoded forms.
+        </p>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">1) Boosted navigation (full-page URLs, HTMX swaps <code>#app</code>)</h2>
+        <p class="text-slate-600">
+            Click a link below. It should update the URL and replace only the <code>#app</code> content (not reload the
+            whole page).
+        </p>
+        <div class="flex flex-wrap gap-3">
+            <a class="inline-flex items-center rounded border px-3 py-2 hover:bg-slate-50" href="/examples/page-1"
+                >Go to Page 1 (boosted)</a
+            >
+            <a class="inline-flex items-center rounded border px-3 py-2 hover:bg-slate-50" href="/examples/page-2"
+                >Go to Page 2 (boosted)</a
+            >
+        </div>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">2) Plain JS behavior (delegated binding survives swaps)</h2>
+        <p class="text-slate-600">
+            This is a simple JS hook in <code>app.js</code> (no HTMX request). It’s delegated so it keeps working after
+            HTMX swaps.
+        </p>
+        <button data-action="ping" class="border px-3 py-2 rounded">Click me (JS delegated)</button>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">3) GET JSON + client-side template (Handlebars)</h2>
+        <p class="text-slate-600">
+            HTMX fetches JSON from <code>/api/examples/hello</code>, then <code>client-side-templates</code> renders it using the
+            Handlebars template below.
+        </p>
+
+        <button
+            hx-get="/api/examples/hello"
+            hx-target="#greeting"
+            hx-swap="outerHTML"
+            handlebars-template="greeting-template"
+            class="p-2 bg-slate-800 text-white rounded-lg"
+            type="button"
+        >
+            Click for Hello (GET JSON + Handlebars)
+        </button>
+
+        <!-- Keep the id stable across swaps so repeat clicks still work -->
+        <p id="greeting" class="text-slate-700"></p>
+
+        <template id="greeting-template">
+            <p id="greeting" class="p-4 bg-slate-50 border rounded">
+                The message is: <span class="text-red-500 font-medium">{{message}}</span>
+            </p>
+        </template>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3">
+        <h2 class="text-xl font-semibold">4) JSON-encoded form (POST) + client-side template</h2>
+        <p class="text-slate-600">
+            The <code>json-enc</code> extension sends form fields as JSON to <code>/api/examples/echo</code>. The response is
+            JSON and is rendered via the template below.
+        </p>
+
+        <!-- IMPORTANT: hx-ext is scoped here so it won't affect boosted GET navigation -->
+        <form
+            hx-ext="json-enc"
+            hx-post="/api/examples/echo"
+            hx-target="#echo-result"
+            hx-swap="outerHTML"
+            handlebars-template="echo-template"
+            class="mt-2 space-y-3 max-w-lg"
+        >
+            <div>
+                <label class="block text-sm font-medium">Name</label>
+                <input name="name" class="border rounded px-3 py-2 w-full" placeholder="Phil" required />
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium">Favorite animal</label>
+                <input name="animal" class="border rounded px-3 py-2 w-full" placeholder="Octopus" />
+            </div>
+
+            <button class="px-4 py-2 rounded bg-slate-800 text-white" type="submit">Submit JSON</button>
+        </form>
+
+        <div id="echo-result" class="mt-2 p-3 bg-slate-50 border rounded text-sm text-slate-700">
+            (Server response will appear here.)
+        </div>
+
+        <template id="echo-template">
+            <div id="echo-result" class="mt-2 p-3 bg-slate-50 border rounded text-sm text-slate-700">
+                <p class="font-medium">Server received:</p>
+                <pre class="mt-2 bg-white border rounded p-2 overflow-auto text-xs">{{json}}</pre>
+                <p class="mt-2 text-slate-500">Hi, {{name}}. Noted: {{animal}}.</p>
+            </div>
+        </template>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">5) Modal + HTMX (swap into the global modal)</h2>
+        <p class="text-slate-600">
+            This reuses <code>/api/examples/hello</code>, but targets the global modal’s content area. When the swap completes,
+            <code>app.js</code> auto-opens the modal.
+        </p>
+
+        <button
+            hx-get="/api/examples/hello"
+            hx-target="#global-modal-content"
+            hx-swap="innerHTML"
+            handlebars-template="modal-hello-template"
+            class="p-2 bg-slate-800 text-white rounded-lg"
+            type="button"
+        >
+            Open Hello in Modal
+        </button>
+
+        <template id="modal-hello-template">
+            <div class="space-y-2">
+                <p class="text-slate-500 text-sm">Loaded from <code>/api/examples/hello</code></p>
+                <p class="text-slate-900">The message is: <span class="text-red-500 font-medium">{{message}}</span></p>
+                <p class="text-slate-600 text-sm">Click outside the modal or press <kbd>Esc</kbd> to close.</p>
+            </div>
+        </template>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">6) Toast + HTMX (swap into the global toaster)</h2>
+        <p class="text-slate-600">
+            Calls <code>/api/examples/toast</code> which returns JSON like
+            <code>{"status":"success","message":"Saved!"}</code>. The response is rendered via the toast template and
+            the toast auto-hides after ~5s. Use the query string to control the status.
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+            <button
+                hx-get="/api/examples/toast?status=success"
+                hx-target="#global-toast-content"
+                hx-swap="innerHTML"
+                handlebars-template="global-toast-template"
+                class="p-2 bg-emerald-600 text-white rounded-lg hover:bg-emerald-700"
+                type="button"
+            >
+                Success Toast
+            </button>
+
+            <button
+                hx-get="/api/examples/toast?status=error"
+                hx-target="#global-toast-content"
+                hx-swap="innerHTML"
+                handlebars-template="global-toast-template"
+                class="p-2 bg-red-600 text-white rounded-lg hover:bg-red-700"
+                type="button"
+            >
+                Error Toast
+            </button>
+
+            <button
+                hx-get="/api/examples/toast?status=warning"
+                hx-target="#global-toast-content"
+                hx-swap="innerHTML"
+                handlebars-template="global-toast-template"
+                class="p-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700"
+                type="button"
+            >
+                Warning Toast
+            </button>
+        </div>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">7) Form error handling examples</h2>
+        <p class="text-slate-600">
+            Three examples demonstrating the standardized error response system: field errors, invariant errors, and success.
+        </p>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6">
+            <!-- Example 1: Field Errors -->
+            <div class="border rounded-lg p-4">
+                <h3 class="font-semibold mb-2">Field Errors</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                    Shows inline validation errors on form fields.
+                </p>
+                <form
+                    hx-ext="json-enc"
+                    hx-post="/api/examples/field-errors"
+                    hx-target="#global-toast-content"
+                    hx-swap="innerHTML"
+                    handlebars-template="global-toast-template"
+                    data-form-errors="inline"
+                    class="space-y-3"
+                >
+                    <div class="form-field">
+                        <label class="block text-sm font-medium">Email</label>
+                        <input
+                            name="email"
+                            type="email"
+                            class="mt-1 border rounded px-3 py-2 w-full text-sm"
+                            placeholder="user@example.com"
+                        />
+                        <div class="field-error-text hidden"></div>
+                    </div>
+
+                    <div class="form-field">
+                        <label class="block text-sm font-medium">Age</label>
+                        <input
+                            name="age"
+                            type="number"
+                            class="mt-1 border rounded px-3 py-2 w-full text-sm"
+                            placeholder="18"
+                        />
+                        <div class="field-error-text hidden"></div>
+                    </div>
+
+                    <button class="w-full px-4 py-2 rounded bg-slate-800 text-white text-sm" type="submit">
+                        Submit (triggers errors)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Example 2: Invariant Error -->
+            <div class="border rounded-lg p-4">
+                <h3 class="font-semibold mb-2">Invariant Error</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                    Shows a business rule violation (no field errors).
+                </p>
+                <form
+                    hx-ext="json-enc"
+                    hx-post="/api/examples/invariant-error"
+                    hx-target="#global-toast-content"
+                    hx-swap="innerHTML"
+                    handlebars-template="global-toast-template"
+                    data-form-errors="inline"
+                    class="space-y-3"
+                >
+                    <div class="form-field">
+                        <label class="block text-sm font-medium">Action</label>
+                        <input
+                            name="action"
+                            class="mt-1 border rounded px-3 py-2 w-full text-sm"
+                            placeholder="delete"
+                        />
+                        <div class="field-error-text hidden"></div>
+                    </div>
+
+                    <button class="w-full px-4 py-2 rounded bg-slate-800 text-white text-sm" type="submit">
+                        Submit (triggers invariant)
+                    </button>
+                </form>
+            </div>
+
+            <!-- Example 3: Success -->
+            <div class="border rounded-lg p-4">
+                <h3 class="font-semibold mb-2">Success</h3>
+                <p class="text-sm text-slate-600 mb-4">
+                    Shows a successful form submission.
+                </p>
+                <form
+                    hx-ext="json-enc"
+                    hx-post="/api/examples/success"
+                    hx-target="#global-toast-content"
+                    hx-swap="innerHTML"
+                    handlebars-template="global-toast-template"
+                    data-form-errors="inline"
+                    class="space-y-3"
+                >
+                    <div class="form-field">
+                        <label class="block text-sm font-medium">Username</label>
+                        <input
+                            name="username"
+                            class="mt-1 border rounded px-3 py-2 w-full text-sm"
+                            placeholder="john_doe"
+                        />
+                        <div class="field-error-text hidden"></div>
+                    </div>
+
+                    <button class="w-full px-4 py-2 rounded bg-emerald-600 text-white text-sm hover:bg-emerald-700" type="submit">
+                        Submit (always succeeds)
+                    </button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">8) Confirm dialog (global modal)</h2>
+        <p class="text-slate-600">
+            Uses <code>BQ.ui.confirm.open()</code>. Escape/click-outside cancels. Confirm runs an action (here:
+            an alert).
+        </p>
+
+        <div class="flex flex-wrap gap-3">
+            <button
+                type="button"
+                class="border rounded px-3 py-2 hover:bg-slate-50"
+                data-confirm
+                data-confirm-message="Do the thing? (event-driven)"
+                data-confirm-subtext="This cannot be undone."
+                data-confirm-confirm-text="Confirm"
+                data-confirm-cancel-text="Cancel"
+                data-confirm-event="demo:confirm"
+            >
+                Open confirm (data-*)
+            </button>
+
+            <button type="button" class="border rounded px-3 py-2 hover:bg-slate-50" id="confirm-js-btn">
+                Open confirm (JS)
+            </button>
+        </div>
+
+        <script>
+            (() => {
+                if (window.__confirmDemoInstalled) return;
+                window.__confirmDemoInstalled = true;
+
+                document.body.addEventListener('demo:confirm', () => {
+                    alert('We did the thing!! (event-driven)');
+                });
+
+                document.addEventListener('click', async (e) => {
+                    const btn = e.target.closest('#confirm-js-btn');
+                    if (!btn) return;
+
+                    const ok = await BQ.ui.confirm.open({
+                        message: 'Do the thing? (js-driven)',
+                        subtext: 'This cannot be undone.',
+                        confirmText: 'Confirm',
+                        cancelText: 'Cancel',
+                        onConfirm: () => alert('We did the thing! (js-driven)'),
+                    });
+
+                    // On cancel, no-op (ok will be false).
+                    void ok;
+                });
+            })();
+        </script>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">9) Click Burst Effect</h2>
+        <p class="text-slate-600">
+            Click anywhere in the grey box below to see a burst effect. The burst is a gold/yellow circle
+            that fades in, grows, and fades out (~0.5s).
+        </p>
+
+        <div
+            data-click-burst
+            class="w-full max-w-md bg-slate-200 rounded-lg cursor-pointer flex items-center justify-center text-slate-500 select-none"
+            style="aspect-ratio: 4 / 3;"
+            data-click-burst-end-size="500"
+        >
+            Click me!
+        </div>
+
+        <p class="text-sm text-slate-500 mt-2">
+            Add <code>data-click-burst</code> to any element. Optional data attributes:
+            <code>data-click-burst-color</code>, <code>data-click-burst-duration</code>,
+            <code>data-click-burst-start-size</code>, <code>data-click-burst-end-size</code>.
+        </p>
+    </section>
+
+    <hr class="border-slate-200" />
+
+    <section class="space-y-3 mb-10">
+        <h2 class="text-xl font-semibold">10) Takeover modal (fullscreen)</h2>
+        <p class="text-slate-600">
+            A fullscreen modal with blurred backdrop. No header/footer - the template provides its own UI.
+            Clicking backdrop does not close it; only explicit close buttons work. Escape still works.
+        </p>
+
+        <button
+            type="button"
+            class="border rounded px-3 py-2 hover:bg-slate-50"
+            id="open-takeover-modal"
+        >
+            Open Takeover Modal
+        </button>
+
+        <template id="takeover-demo-template">
+            <div class="flex flex-col items-center justify-center min-h-full p-8 text-center">
+                <h1 class="text-4xl font-bold text-slate-900 mb-4">Takeover Modal</h1>
+                <p class="text-lg text-slate-600 mb-2">This is a fullscreen modal with a blurred backdrop.</p>
+                <p class="text-sm text-slate-500 mb-8">Press <kbd class="px-2 py-1 bg-slate-200 rounded">Esc</kbd> or click the button below to close.</p>
+
+                <div class="flex gap-4">
+                    <button
+                        type="button"
+                        class="px-6 py-3 bg-slate-900 text-white rounded-lg hover:bg-slate-800"
+                        data-modal-close
+                    >
+                        Close Takeover
+                    </button>
+                    <button
+                        type="button"
+                        class="px-6 py-3 border border-slate-300 rounded-lg hover:bg-slate-50"
+                        onclick="alert('You clicked an action button!')"
+                    >
+                        Do Something
+                    </button>
+                </div>
+            </div>
+        </template>
+
+        <script>
+            (() => {
+                if (window.__takeoverDemoInstalled) return;
+                window.__takeoverDemoInstalled = true;
+
+                document.addEventListener('click', (e) => {
+                    const btn = e.target.closest('#open-takeover-modal');
+                    if (!btn) return;
+
+                    BQ.ui.openFormModal({
+                        templateId: 'takeover-demo-template',
+                        title: 'Takeover Demo',
+                        size: 'takeover',
+                    });
+                });
+            })();
+        </script>
+    </section>
+</div>

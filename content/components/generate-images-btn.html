@@ -1,0 +1,19 @@
+<button
+    type="button"
+    class="border border-dashed rounded px-3 py-2 text-xs text-slate-500 hover:bg-slate-100 hover:text-slate-700"
+    data-type="[[type]]"
+    data-confirm
+    data-confirm-message="Generate images for {count} [[label]]?"
+    data-confirm-subtext="Generate images for any [[label]] missing an image. ~16 seconds per image."
+    data-confirm-confirm-text="Generate"
+    data-confirm-request-method="POST"
+    data-confirm-request-url="/api/admin/generate-images"
+    data-confirm-refresh-target="[[refresh-target]]"
+    data-confirm-progress-url="/api/admin/generate-images/count?type=[[type]]"
+    data-confirm-progress-label="Generating images..."
+    data-confirm-progress-item-label="generated"
+    data-confirm-checkbox-label="Regenerate all (including existing images)"
+    data-confirm-checkbox-key="force"
+>
+    Generate Images
+</button>

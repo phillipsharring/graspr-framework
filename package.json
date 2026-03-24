@@ -1,24 +1,19 @@
 {
-    "name": "tailwind-htmx",
-    "version": "1.0.0",
-    "description": "",
+    "name": "@phillipsharring/graspr-framework",
+    "version": "0.2.3",
+    "description": "HTMX + Handlebars + Tailwind frontend framework",
     "type": "module",
-    "scripts": {
-        "dev": "vite",
-        "build": "vite build && node scripts/build-pages.mjs",
-        "preview": "vite preview"
+    "exports": {
+        ".": "./src/index.js",
+        "./init": "./src/init.js",
+        "./styles/*": "./styles/*",
+        "./src/*": "./src/*"
     },
     "author": "Phillip Harrington <phillip@phillipharrington.com> (https://phillipharrington.com/)",
-    "private": true,
-    "devDependencies": {
-        "@tailwindcss/vite": "^4.1.18",
-        "handlebars": "^4.7.8",
-        "htmx.org": "^2.0.8",
-        "tailwindcss": "^4.1.18",
-        "vite": "^7.3.0"
-    },
-    "dependencies": {
-        "@phillipsharring/graspr-framework": ">=0.1.0",
-        "sortablejs": "^1.15.7"
+    "license": "MIT",
+    "peerDependencies": {
+        "handlebars": "^4.7.0",
+        "htmx.org": "^2.0.0",
+        "sortablejs": "^1.15.0"
     }
 }

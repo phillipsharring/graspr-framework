@@ -1,178 +1,119 @@
-# HTMX + Tailwind + Vite
+# Graspr Framework
 
-Just a quick repo to get started on projects with the aforementioned tools. I've also included [json-enc](https://htmx.org/extensions/json-enc/), [client-side-templates](https://htmx.org/extensions/client-side-templates/), and [Handlebars](https://handlebarsjs.com/) to work with JSON APIs. Remove these if you don't need them. If you prefer something other than Handlebars, install that instead. Both actions will require an update to `app.js`.
+A frontend framework for building server-driven web applications with **HTMX + Handlebars + Tailwind CSS**.
 
-The _json-enc_ and _client-side-templates_ extensions are included in the repo. If you want or need a newer version, you'll have to download and replace them yourself. Although they are pretty simple so I doubt there'll be many changes to them.
+Graspr handles the hard parts of HTMX-based apps: boosted navigation, auth-gated widgets, modal/toast systems, CSRF token management, form error handling, and client-side template rendering — so you can focus on your pages and domain logic.
 
-## Pages: Vite `index.html` vs baked HTML pages
-
-- **Dev (`npm run dev`)**: Vite serves “pretty URL” pages dynamically from `src/pages/**` (so `/about/` works, and HTMX boosted navigation works without a full reload).
-- **Build/Preview (`npm run build` / `npm run preview`)**: `npm run build` runs Vite and then `scripts/build-pages.mjs`, which generates real site pages into `dist/` using:
-  - `src/layouts/base.html`
-  - `src/pages/**/*.html`
-
-### File-based page routing
-
-Pages are discovered automatically (no route list to maintain):
-
-- `src/pages/index.html` → `/`
-- `src/pages/about.html` → `/about/`
-- `src/pages/game/index.html` → `/game/`
-- `src/pages/game/binder.html` → `/game/binder/`
-
-Build output mirrors those routes:
-
-- `/about/` becomes `dist/about/index.html`
-- `/game/binder/` becomes `dist/game/binder/index.html`
-
-## Components (build-time)
-
-Pages can include build-time components with props + slot content:
-
-```html
-<callout title="Hello" subtle class="mb-12">
-  <p>slot content</p>
-</callout>
-```
-
-Component templates live in `src/components/*.html` and use:
-- `[[slot]]` for inner content
-- `[[prop]]` for escaped prop values
-- `[[{prop}]]` for raw prop values
-- `[[#if flag]]...[[else]]...[[/if]]` for simple boolean conditionals (missing flags are false)
-
-Notes:
-- A component can also be invoked as `<component name="Callout" ...>` if you prefer.
-- If the caller passes a `class="..."` prop and the component template’s first element already has a `class="..."`,
-  the compiler will merge them (e.g. `class="p-6"` + `class="mb-12"` → `class="p-6 mb-12"`).
-
-## API (Handlr) integration
-
-In HTML, keep HTMX endpoints **same-origin** (e.g. `hx-post="/api/examples/echo"`). In production you route `/api/*` to Handlr at the CDN/reverse-proxy layer.
-
-For local dev, Vite proxies `/api/*` to Handlr:
+## Installation
 
 ```bash
-# example: if Handlr is running at http://localhost:8000
-HANDLR_ORIGIN=http://localhost:8000 npm run dev
+npm install @phillipsharring/graspr-framework
 ```
 
-## Global Modal (HTMX-powered)
-
-The app layout (`src/layouts/base.html`) includes a standard global modal that is **hidden by default** and intended to be populated via HTMX swaps.
-
-### Targets / IDs
-
-- `#global-modal`: modal root (shown/hidden)
-- `#global-modal-content`: where HTMX responses should be swapped in
-
-### Typical usage (HTMX → modal)
-
-Point any HTMX request at the modal content container:
-
-```html
-<button
-  hx-get="/api/examples/hello"
-  hx-target="#global-modal-content"
-  hx-swap="innerHTML"
-  type="button"
->
-  Open in modal
-</button>
-```
-
-If you’re using `client-side-templates` + Handlebars with JSON APIs, add `handlebars-template="..."` as usual.
-
-### Auto-open behavior
-
-`src/app.js` listens for `htmx:afterSwap`. If the swap target is `#global-modal-content`, it automatically opens the modal.
-
-### Closing behavior
-
-The modal can be closed via:
-- Clicking the overlay (the dark area behind the dialog)
-- Clicking any element with `data-modal-close` (including the ✕ button)
-- Pressing `Escape`
-
-### Size / overflow behavior
-
-- The dialog width is capped (`max-w-xl`) but is responsive (`w-full` on small screens).
-- For large content, the modal body scrolls inside the dialog (`overflow-auto` with a viewport-based max height).
-
-### Manual control (optional)
-
-`src/app.js` exposes a tiny helper:
-
-- `window.GrasprModal.open()`
-- `window.GrasprModal.close()`
-
-## Global Toast (HTMX-powered)
-
-The layout also includes a global “toast” notification container in the **upper-right**.
-
-### Targets / IDs
-
-- `#global-toast-wrap`: toast root (shown/hidden)
-- `#global-toast-content`: where HTMX responses should be swapped in
-- `#global-toast-template`: Handlebars template used to render `{ status, message }`
-
-### Typical usage (HTMX → toast)
-
-Return JSON like:
-
-```json
-{ "status": "success", "message": "Saved!" }
-```
-
-Then target the toast container and use the template:
-
-```html
-<button
-  hx-post="/api/something"
-  hx-target="#global-toast-content"
-  hx-swap="innerHTML"
-  handlebars-template="global-toast-template"
-  type="button"
->
-  Save
-</button>
-```
-
-### Status → styling
-
-The template uses the `status` field to choose Tailwind classes:
-- `success` (default)
-- `warning`
-- `error` (also accepts the typo `eror`)
-
-### Auto-hide
-
-After HTMX swaps into `#global-toast-content`, `src/app.js` auto-shows the toast and auto-hides it after ~10 seconds.
-
-### Manual control (optional)
-
-`src/app.js` exposes:
-- `window.GrasprToast.show({ message, status, timeoutMs })`
-- `window.GrasprToast.close()`
-
-To use it just enter the commands below and start coding:
-
+Peer dependencies (your app must install these):
 ```bash
-npm install
-npm run dev
+npm install htmx.org handlebars sortablejs
 ```
 
-Once you're happy, do a prod preview:
+For a ready-to-go project structure, use the [Graspr App Skeleton](https://github.com/phillipsharring/graspr-app-skeleton).
 
-```bash
-npm run build
-npm run preview
+## What's Included
+
+### Core Infrastructure (`core/`)
+- **boosted-nav** — fixes HTMX boosted navigation edge cases (inherited targets, `hx-select` overrides, layout mismatch detection)
+- **csrf** — global `fetch()` interceptor + HTMX hook for automatic CSRF token headers
+- **auth-state** — auth-gated UI orchestration (`auth-load` events, permission gating, login modal, 401/403 handling)
+- **forms** — inline form error display, modal form lifecycle, success redirect/refresh patterns
+- **pagination** — paginated table controls with URL param syncing
+- **search** — debounced search input with HTMX integration
+- **sortable** — drag-and-drop reordering via SortableJS wrapper
+- **table-sort** — clickable column header sorting with URL persistence
+- **navigation** — URL helpers, active nav highlighting
+
+### UI Widgets (`ui/`)
+- **modal** — global modal state machine with focus management and overlay/escape handling
+- **modal-form** — modal form populator (set fields, method, clear errors, focus)
+- **toast** — toast notification system with auto-dismiss
+- **confirm-dialog** — confirmation dialog with optional progress mode for batch operations
+- **typeahead** — autocomplete widget factory with keyboard navigation
+- **click-burst** — visual click feedback animation
+
+### HTMX Extensions (`lib/`)
+- **json-enc** — JSON encoding extension for HTMX requests
+- **client-side-templates** — Handlebars template rendering for HTMX JSON responses
+
+### Helpers (`helpers/`)
+- **handlebars-helpers** — generic Handlebars helpers (eq, neq, and, or, truncate, timeAgo, formatDateTime, json, treeIndent, etc.)
+- **escape-html** — HTML escape utility
+- **populate-select** — `<select>` field populator
+- **route-params** — URL parameter extraction for dynamic routes (`[id]` patterns)
+- **debounce** — debounce utility + search input sanitization
+
+### Auth (`auth.js`)
+- Single `/api/auth/me` call per page load, cached
+- `checkAuth()` — returns `Promise<boolean>`
+- `getAuthData()` — returns full auth response with permissions
+- `refreshAuthData()` — invalidates cache and re-fetches
+
+### API Client (`fetch-client.js`)
+- `apiFetch(url, options)` — wraps `fetch()` with CSRF headers, JSON content type, body serialization
+
+### Styles (`styles/base.css`)
+- Form error styles, HTMX request dimming, modal/takeover animations, sortable drag-and-drop, table sort headers, confirm dialog, active nav highlighting
+
+## Usage
+
+### Import everything at once
+```js
+import {
+    GrasprToast, openFormModal, GrasprConfirm,
+    initPagination, initTableSort,
+    getRouteParams, escapeHtml,
+} from '@phillipsharring/graspr-framework';
 ```
 
-And then build it:
-
-```bash
-npm run build
+### Side-effect initialization
+```js
+// Registers CSRF interceptors, boosted-nav handlers, auth-state listeners,
+// form error handling, search, and sortable — in the correct order.
+import '@phillipsharring/graspr-framework/init';
 ```
 
-And that's pretty much it. Enjoy!
+### HTMX extensions (import after setting window.Handlebars)
+```js
+import '@phillipsharring/graspr-framework/src/lib/json-enc.js';
+import '@phillipsharring/graspr-framework/src/lib/client-side-templates.js';
+```
+
+### Styles
+```css
+@import 'tailwindcss';
+@source "../../content/**/*.html";
+@source "../**/*.js";
+@import '@phillipsharring/graspr-framework/styles/base.css';
+```
+
+### Configurable auth permissions
+```js
+import { registerAdminPermissionPrefixes } from '@phillipsharring/graspr-framework';
+
+registerAdminPermissionPrefixes([
+    ['/admin/design/', 'design.access'],
+    ['/admin/story/', 'story.access'],
+    ['/admin/', 'admin.access'],
+]);
+```
+
+## Designed For
+
+Graspr is the frontend companion to [Handlr Framework](https://github.com/phillipsharring/handlr-framework) (PHP backend), but works with any backend that serves JSON APIs and HTML pages. The auth system expects a `/api/auth/me` endpoint; everything else is configurable.
+
+## Requirements
+
+- Vite 7+
+- Tailwind CSS 4+
+- Node.js 18+
+
+## License
+
+MIT

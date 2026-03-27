@@ -62,6 +62,12 @@ document.body.addEventListener('htmx:beforeSwap', (e) => {
 
         if (!newApp) return;
 
+        // Preserve the page title — replacing serverResponse strips <head>
+        const newTitle = doc.querySelector('title');
+        if (newTitle) {
+            document.title = newTitle.textContent;
+        }
+
         detail.target = app;
         detail.serverResponse = newApp.outerHTML;
         detail.swapOverride = 'outerHTML';

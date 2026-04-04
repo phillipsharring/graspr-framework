@@ -52,6 +52,17 @@ function applyAuthState(authData) {
         loginLink?.removeAttribute('hidden');
     }
 
+    // Auth-visibility elements — show or hide based on auth state.
+    // Use hidden attribute in markup so they start invisible (no flash).
+    //   data-show-if-auth:  hidden by default, revealed when authenticated
+    //   data-hide-if-auth:  hidden by default, revealed when NOT authenticated
+    document.querySelectorAll('[data-show-if-auth]').forEach(el => {
+        if (authenticated) el.removeAttribute('hidden');
+    });
+    document.querySelectorAll('[data-hide-if-auth]').forEach(el => {
+        if (!authenticated) el.removeAttribute('hidden');
+    });
+
     // Widgets that require an authenticated session.
     // Track triggered elements in a WeakSet so each element only fires once,
     // even if multiple afterSwap/afterSettle handlers call applyAuthState while

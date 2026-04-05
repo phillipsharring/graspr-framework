@@ -235,11 +235,11 @@ async function fetchPendingCount(progressUrl) {
 function renderProgressUI(total, { progressLabel = 'Processing...', progressItemLabel = 'processed' } = {}) {
     return `
         <div class="space-y-4 py-2" data-progress-container>
-            <p class="text-sm text-slate-700 font-medium">${progressLabel}</p>
-            <div class="w-full bg-slate-200 rounded-full h-3 overflow-hidden">
-                <div class="confirm-progress-bar bg-slate-700 h-3 rounded-full" style="width: 0%"></div>
+            <p class="text-sm font-medium confirm-message">${progressLabel}</p>
+            <div class="w-full rounded-full h-3 overflow-hidden" style="background: var(--graspr-progress-bg)">
+                <div class="confirm-progress-bar h-3 rounded-full" style="width: 0%; background: var(--graspr-progress-fill)"></div>
             </div>
-            <p class="text-sm text-slate-500" data-progress-text>0 of ${total} ${progressItemLabel}</p>
+            <p class="text-sm confirm-subtext" data-progress-text>0 of ${total} ${progressItemLabel}</p>
         </div>
     `;
 }

@@ -1,6 +1,59 @@
 /* Graspr Framework — base styles
    Import this from your app's CSS after @import 'tailwindcss' and @source directives. */
 
+/* ── Theme variables ──
+   Override these in your app's CSS to customize the framework's UI components.
+
+   Example:
+     :root {
+       --graspr-text: #1C1C1C;
+       --graspr-primary: #A3B8A5;
+       --graspr-primary-hover: #8AA38D;
+       --graspr-surface: #FEFBF8;
+     }
+*/
+:root {
+    /* Text */
+    --graspr-text:              rgb(15 23 42);      /* slate-900 */
+    --graspr-text-secondary:    rgb(71 85 105);      /* slate-600 */
+    --graspr-text-muted:        rgb(100 116 139);    /* slate-500 */
+
+    /* Primary action (confirm buttons, active states) */
+    --graspr-primary:           rgb(15 23 42);       /* slate-900 */
+    --graspr-primary-hover:     rgb(30 41 59);       /* slate-800 */
+    --graspr-primary-text:      white;
+
+    /* Secondary/cancel */
+    --graspr-border:            rgb(203 213 225);    /* slate-300 */
+    --graspr-border-light:      rgb(226 232 240);    /* slate-200 */
+    --graspr-surface:           rgb(248 250 252);    /* slate-50 */
+    --graspr-surface-hover:     rgb(241 245 249);    /* slate-100 */
+
+    /* Toast: success */
+    --graspr-toast-success-bg:  rgb(22 163 74);      /* green-600 */
+    --graspr-toast-success-text: white;
+    --graspr-toast-success-border: rgb(21 128 61);   /* green-700 */
+
+    /* Toast: warning */
+    --graspr-toast-warning-bg:  rgb(254 243 199);    /* amber-100 */
+    --graspr-toast-warning-text: rgb(120 53 15);     /* amber-900 */
+    --graspr-toast-warning-border: rgb(253 230 138); /* amber-200 */
+
+    /* Toast: error */
+    --graspr-toast-error-bg:    rgb(220 38 38);      /* red-600 */
+    --graspr-toast-error-text:  white;
+    --graspr-toast-error-border: rgb(185 28 28);     /* red-700 */
+
+    /* Modal */
+    --graspr-modal-bg:          white;
+    --graspr-modal-border:      var(--graspr-border-light);
+    --graspr-modal-backdrop:    rgba(0, 0, 0, 0.25);
+
+    /* Progress bar */
+    --graspr-progress-bg:       var(--graspr-border-light);
+    --graspr-progress-fill:     var(--graspr-text-secondary);
+}
+
 /* Override inline FOUC prevention — body becomes visible once this stylesheet loads */
 body { opacity: 1; }
 
@@ -56,10 +109,17 @@ button[disabled] {
     transition: transform 150ms ease-out;
     transform: translateY(2rem);
     outline: none;
+    background: var(--graspr-modal-bg);
+    border-color: var(--graspr-modal-border);
 }
 
 #global-modal.modal-open [role="dialog"] {
     transform: translateY(0);
+}
+
+/* Modal backdrop */
+#global-modal > .absolute.inset-0 {
+    background: var(--graspr-modal-backdrop);
 }
 
 /* Darker backdrop when examples layout is active */
@@ -128,8 +188,8 @@ body:has(#app[data-layout="examples"]) #global-modal .absolute.inset-0 {
 }
 
 /* Sortable drag-and-drop */
-.sortable-ghost { opacity: 0.4; background-color: #dbeafe; }
-.sortable-chosen { background-color: #eff6ff; }
+.sortable-ghost { opacity: 0.4; background-color: var(--graspr-surface); }
+.sortable-chosen { background-color: var(--graspr-surface); }
 .sortable-disabled .drag-handle { visibility: hidden; pointer-events: none; }
 
 /* Active nav link — faux-bold via text-shadow to avoid layout shift */
@@ -137,20 +197,37 @@ body:has(#app[data-layout="examples"]) #global-modal .absolute.inset-0 {
     text-shadow: 0 0 0.01px currentColor, 0 0 0.01px currentColor;
 }
 
-/* ---- Confirm dialog: default (admin/base) ---- */
-.confirm-message   { color: rgb(15 23 42); }        /* slate-900 */
-.confirm-subtext   { color: rgb(71 85 105); }        /* slate-600 */
-.confirm-checkbox  { color: rgb(51 65 85); }          /* slate-700 */
+/* ── Confirm dialog ── */
+.confirm-message   { color: var(--graspr-text); }
+.confirm-subtext   { color: var(--graspr-text-secondary); }
+.confirm-checkbox  { color: var(--graspr-text); }
 .confirm-cancel-btn {
-    border-color: rgb(203 213 225);                   /* slate-300 */
-    color: rgb(51 65 85);
+    border-color: var(--graspr-border);
+    color: var(--graspr-text);
 }
-.confirm-cancel-btn:hover { background: rgb(248 250 252); } /* slate-50 */
+.confirm-cancel-btn:hover { background: var(--graspr-surface); }
 .confirm-ok-btn {
-    background: rgb(15 23 42);                        /* slate-900 */
-    color: white;
+    background: var(--graspr-primary);
+    color: var(--graspr-primary-text);
 }
-.confirm-ok-btn:hover { background: rgb(30 41 59); }  /* slate-800 */
+.confirm-ok-btn:hover { background: var(--graspr-primary-hover); }
+
+/* ── Toast variants ── */
+.graspr-toast-success {
+    background: var(--graspr-toast-success-bg);
+    color: var(--graspr-toast-success-text);
+    border-color: var(--graspr-toast-success-border);
+}
+.graspr-toast-warning {
+    background: var(--graspr-toast-warning-bg);
+    color: var(--graspr-toast-warning-text);
+    border-color: var(--graspr-toast-warning-border);
+}
+.graspr-toast-error {
+    background: var(--graspr-toast-error-bg);
+    color: var(--graspr-toast-error-text);
+    border-color: var(--graspr-toast-error-border);
+}
 
 /* Table column sort headers */
 th[data-sort] { cursor: pointer; user-select: none; }

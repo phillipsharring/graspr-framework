@@ -89,17 +89,17 @@ export const GrasprToast = {
 export function registerToastHelpers(Handlebars) {
     Handlebars.registerHelper('toastClass', (status) => {
         const s = String(status || 'success').toLowerCase();
-        // Note: accept the user's typo "eror" as error.
         const normalized = s === 'eror' ? 'error' : s;
 
+        // Use CSS-var-driven classes for themeable toasts
         switch (normalized) {
             case 'warning':
-                return 'bg-amber-100 text-amber-900 border-amber-200';
+                return 'graspr-toast-warning';
             case 'error':
-                return 'bg-red-600 text-white border-red-700';
+                return 'graspr-toast-error';
             case 'success':
             default:
-                return 'bg-green-600 text-white border-green-700';
+                return 'graspr-toast-success';
         }
     });
 }

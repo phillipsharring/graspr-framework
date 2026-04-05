@@ -6,10 +6,10 @@ export function registerHandlebarsHelpers(Handlebars) {
     // ─── Partials ───
 
     Handlebars.registerPartial('formButtons', `<div class="flex justify-end gap-3 pt-2">
-    <button type="button" class="border rounded px-3 py-2 hover:bg-slate-50" data-modal-close>
+    <button type="button" class="graspr-btn-cancel border rounded px-3 py-2" data-modal-close>
         Cancel
     </button>
-    <button type="submit" class="rounded px-3 py-2 bg-slate-800 text-white hover:bg-slate-700">
+    <button type="submit" class="graspr-btn-primary rounded px-3 py-2">
         {{label}}
     </button>
 </div>`);

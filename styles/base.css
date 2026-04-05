@@ -57,6 +57,22 @@
 /* Override inline FOUC prevention — body becomes visible once this stylesheet loads */
 body { opacity: 1; }
 
+/* ── Buttons ── */
+.graspr-btn-primary {
+    background: var(--graspr-primary);
+    color: var(--graspr-primary-text);
+}
+.graspr-btn-primary:hover {
+    background: var(--graspr-primary-hover);
+}
+.graspr-btn-cancel {
+    border-color: var(--graspr-border);
+    color: var(--graspr-text);
+}
+.graspr-btn-cancel:hover {
+    background: var(--graspr-surface);
+}
+
 /* Form error styles */
 .field-error {
     @apply border-red-600;

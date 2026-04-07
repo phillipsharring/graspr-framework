@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.8 addendum
+
+### Graspr Build
+- Build mechanics now live in @phillipsharring/graspr-build — separate package, no impact on runtime
+
 ## 0.2.0
 
 ### Added

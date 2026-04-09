@@ -1,5 +1,7 @@
 # Graspr Framework
 
+![Handlr](handlr.png)
+
 A frontend framework for building server-driven web applications with **HTMX + Handlebars + Tailwind CSS**.
 
 Graspr handles the hard parts of HTMX-based apps: boosted navigation, auth-gated widgets, modal/toast systems, CSRF token management, form error handling, and client-side template rendering — so you can focus on your pages and domain logic.

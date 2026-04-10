@@ -1,6 +1,6 @@
 # Graspr Framework
 
-![Handlr](handlr.png)
+![Graspr](graspr.png)
 
 A frontend framework for building server-driven web applications with **HTMX + Handlebars + Tailwind CSS**.
 

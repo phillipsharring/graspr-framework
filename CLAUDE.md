@@ -1,4 +1,4 @@
-# Graspr Frontend Framework — Claude Code Notes
+# Graspr Frontend Framework  - Claude Code Notes
 
 ## Architecture
 
@@ -10,7 +10,7 @@ Apps use `hx-boost="true"` on `<body>`. Every `<a>` and `<form>` is automaticall
 
 ### How It Works
 
-- `<body>` has `hx-target="#app" hx-select="#app" hx-swap="outerHTML"` — all boosted links swap only `<main id="app">`, preserving header/footer/templates.
+- `<body>` has `hx-target="#app" hx-select="#app" hx-swap="outerHTML"`  - all boosted links swap only `<main id="app">`, preserving header/footer/templates.
 - Elements outside `#app` (header widgets) persist across navigation.
 - Elements inside `#app` are fresh DOM nodes after every nav.
 - Cross-layout navigation forces a full page reload (layout mismatch detection).
@@ -22,9 +22,9 @@ Apps use `hx-boost="true"` on `<body>`. Every `<a>` and `<form>` is automaticall
 2. Boosted nav (clicking a link within the same layout)
 
 Key implications:
-- `DOMContentLoaded` does NOT fire on boosted nav — only `htmx:afterSwap`/`htmx:afterSettle`
+- `DOMContentLoaded` does NOT fire on boosted nav  - only `htmx:afterSwap`/`htmx:afterSettle`
 - HTMX lifecycle: `beforeSwap` → DOM swap → `afterSwap` → settle (processes `hx-trigger`) → `afterSettle`
-- Fire custom events in `afterSettle`, NOT `afterSwap` — new elements' `hx-trigger` isn't wired until settle
+- Fire custom events in `afterSettle`, NOT `afterSwap`  - new elements' `hx-trigger` isn't wired until settle
 
 ## Self-Loading Elements
 
@@ -38,8 +38,8 @@ Elements that load their own content via HTMX:
 
 - `hx-target="this"` + `hx-select="unset"` overrides body's `#app` targeting
 - `data-requires-auth` needed for `auth-load` to fire
-- Do NOT use `hx-disinherit` — breaks boosted nav by blocking `hx-boost` inheritance
-- Do NOT use `hx-push-url="false"` — unnecessary and child links inherit it, breaking URL updates
+- Do NOT use `hx-disinherit`  - breaks boosted nav by blocking `hx-boost` inheritance
+- Do NOT use `hx-push-url="false"`  - unnecessary and child links inherit it, breaking URL updates
 
 ## Auth System
 
@@ -95,7 +95,7 @@ window.onReady(function() {
 });
 ```
 
-- Don't use `hx-trigger="auth-load"` with dynamically-set `hx-get` — race condition
+- Don't use `hx-trigger="auth-load"` with dynamically-set `hx-get`  - race condition
 - After changing `hx-get`, call `htmx.process(el)` before triggering
 - CloudFront URL rewrite function must be updated for new dynamic routes in production
 
@@ -119,8 +119,8 @@ Must check for `'complete'`, NOT `'loading'`. Module scripts (`type="module"`) e
 
 ### Two Template Types
 
-- `handlebars-array-template` — renders ONCE with `{ data: rows }`. Template must use `{{#each data}}`.
-- `handlebars-template` (non-array) — spreads data into context. Use `{{data.field}}` for fields that collide with the response envelope (e.g. `status`).
+- `handlebars-array-template`  - renders ONCE with `{ data: rows }`. Template must use `{{#each data}}`.
+- `handlebars-template` (non-array)  - spreads data into context. Use `{{data.field}}` for fields that collide with the response envelope (e.g. `status`).
 
 ### Template Gotchas
 
@@ -142,14 +142,14 @@ App.ui.openFormModal({
 });
 ```
 
-- `fields: { name: value }` — populates form inputs by name attribute
+- `fields: { name: value }`  - populates form inputs by name attribute
 - `formUrl` + `formMethod` must both be specified
 
 ### Modal Refresh After Submit
 
 On the `<form>` element:
-- `data-refresh-target="#some-element"` — fires HTMX `refresh` trigger on that element
-- `data-refresh-event="event-name"` — dispatches custom event on `document.body`
+- `data-refresh-target="#some-element"`  - fires HTMX `refresh` trigger on that element
+- `data-refresh-event="event-name"`  - dispatches custom event on `document.body`
 
 ## Inline Script Rules
 
@@ -254,4 +254,4 @@ Add `css-loading` class to `<html>` in all layouts.
 - Reversed order excludes everything.
 - HTML files get short cache (`max-age=300`), assets get immutable cache (`max-age=31536000`).
 - CloudFront Function handles URL rewriting for dynamic routes (`/things/{uuid}/` → `/things/[id]/index.html`).
-- Don't use `--delete` on the HTML sync pass — it deletes assets uploaded by the first pass.
+- Don't use `--delete` on the HTML sync pass  - it deletes assets uploaded by the first pass.

@@ -140,7 +140,10 @@ export function registerAdminPermissionPrefixes(prefixes) {
 function checkAdminPermissions(appEl) {
     if (appEl.dataset?.layout !== 'admin') return;
 
-    const path = window.location.pathname;
+    // Normalize so a request to a registered prefix root without its trailing
+    // slash (e.g. `/admin` for prefix `/admin/`) still matches.
+    const rawPath = window.location.pathname;
+    const path = rawPath.endsWith('/') ? rawPath : rawPath + '/';
     const required = adminPermissionPrefixes.find(([prefix]) => path.startsWith(prefix))?.[1];
     if (!required) return;
 

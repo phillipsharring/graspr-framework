@@ -1,5 +1,10 @@
 # Changelog
 
+## 0.2.9
+
+### Fixed
+- `checkAdminPermissions()` (auth-state.js): registered admin prefixes ending in `/` failed to match when the URL was the prefix root without its trailing slash (e.g. `/admin` for prefix `/admin/`). The opacity gate on `<main id="app">` was never cleared, leaving the page area transparent on the index URL. Pathname is now normalized with a trailing slash before the `startsWith` check.
+
 ## 0.2.8 addendum
 
 ### Graspr Build

@@ -1,5 +1,5 @@
 {
-    "name": "@phillipsharring/graspr-framework",
+    "name": "@phillipsharring/handlr-frontend",
     "version": "0.2.9",
     "description": "HTMX + Handlebars + Tailwind frontend framework",
     "type": "module",
